@@ -1,0 +1,35 @@
+﻿@inject SignInManager<ApplicationUser> _signInManager;
+
+@model BookDetailsViewModel
+
+@{
+    ViewData["Title"] = "Book Page";
+    var imagePath = "~/images/books/" + (Model.Book.ImageFileName ?? "no_image_found.jpg");
+}
+
+<h3 class="display-4">@Model.PageTitle</h3>
+
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h2>@Model.Book.Title</h2>
+            </div>
+            <div class="card-body text-center">
+                <img class="card-img-top imageThumbnail" src="@imagePath" asp-append-version="true" />
+
+                <h4>ISBN: @Model.Book.ISBN</h4>
+                <h4>Author: @Model.Book.Author</h4>
+                <h4>Quantity: @Model.Book.Quantity</h4>
+            </div>
+            <div class="card-footer text-center">
+                <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Index">Back</a>
+                @if (_signInManager.IsSignedIn(User))
+                {
+                    <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Edit" asp-route-id="@Model.Book.Id">Edit</a>
+                    <a class="btn btn-danger" asp-area="" asp-controller="Book" asp-action="Delete" asp-route-id="@Model.Book.Id">Delete</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<div class="text-center">
+    <h1 class="display-4">List of Users</h1>
+</div>
+
+@if (Model.Any())
+{
+    <div class="row">
+        <a asp-controller="Account" asp-action="Register" class="btn btn-success btn-block">Register User</a>
+    </div>
+    foreach (var user in Model)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                User Id : @user.Id
+            </div>
+            <div class="card-body">
+                @user.UserName
+            </div>
+            <div class="card-footer">
+                <form asp-action="DeleteUser" asp-route-id="@user.Id" method="post">
+                    <a asp-action="EditUser" asp-controller="Administration" 
+                       asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                    <span id="confirmDeleteSpan_@user.Id" style="display:none">
+                        <span>Are you sure to delete this user?</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a class="btn btn-primary text-light"
+                           onclick="confirmDelete('@user.Id', false)">No</a>
+                    </span>
+                    <span id="deleteSpan_@user.Id">
+                        <a class="btn btn-danger text-light"
+                           onclick="confirmDelete('@user.Id', true)">Delete</a>
+                    </span>
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No Users registered
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                Use the button below to register
+            </h5>
+            <a class="btn btn-primary" style="width:auto"
+               asp-controller="Account" asp-action="Register">
+                Register
+            </a>
+        </div>
+    </div>
+}
+

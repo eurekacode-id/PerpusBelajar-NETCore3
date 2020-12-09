@@ -1,0 +1,41 @@
+﻿@inject SignInManager<ApplicationUser> _signInManager;
+
+
+@model IEnumerable<Book>
+
+@{
+    ViewData["Title"] = "Book Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Book Page</h1>
+</div>
+<div class="row">
+    @if (_signInManager.IsSignedIn(User))
+    {
+        <a asp-controller="Book" asp-action="Create" class="btn btn-success btn-block">Add new book</a>
+    }
+</div>
+<div class="row">
+    <div class="card-deck">
+        @foreach (var book in Model)
+        {
+            var imagePath = "~/images/books/" + (book.ImageFileName ?? "no_image_found.jpg");
+
+            <div class="card card-m3" style="min-width:18rem;max-width:30.5%;">
+                <div class="card-header"><h3>@book.Title</h3></div>
+                <img class="card-img-top imageThumbnail" src="@imagePath" alt="@book.Title" asp-append-version="true" />
+                <div class="card-footer text-center">
+                    <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Details" asp-route-id="@book.Id">View</a>
+                    @if (_signInManager.IsSignedIn(User))
+                    {
+                        <a class="btn btn-primary" asp-area="" asp-controller="Book" asp-action="Edit" asp-route-id="@book.Id">Edit</a>
+                        <a class="btn btn-danger" asp-area="" asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id">Delete</a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
